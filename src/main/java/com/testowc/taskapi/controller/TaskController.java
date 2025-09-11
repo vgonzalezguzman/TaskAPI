@@ -45,6 +45,18 @@ public class TaskController {
         return taskRepository.save(task);
     }
 
+    @PutMapping("/{id}")
+    public Task update(@PathVariable String id, @Valid @RequestBody Task taskDetails) {
+        Task task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("La tasca no existeix"));
+
+        task.setName(taskDetails.getName());
+        task.setDescription(taskDetails.getDescription());
+        task.setCompleted(taskDetails.getCompleted());
+        task.setDueDate(taskDetails.getDueDate());
+
+        return taskRepository.save(task);
+    }
+
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id) {
         taskRepository.deleteById(id);
