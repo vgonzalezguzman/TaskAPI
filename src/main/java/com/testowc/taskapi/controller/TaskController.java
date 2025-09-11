@@ -26,6 +26,11 @@ public class TaskController {
         return taskRepository.findById(id).orElse(null);
     }
 
+    @GetMapping("/filter")
+    public List<Task> getTasksByCompleted(@RequestParam Boolean completed) {
+        return taskRepository.findByCompleted(completed);
+    }
+
     @PostMapping
     public Task create(@Valid @RequestBody Task task) {
         return taskRepository.save(task);
