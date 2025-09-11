@@ -2,6 +2,7 @@ package com.testowc.taskapi.controller;
 
 import com.testowc.taskapi.model.Task;
 import com.testowc.taskapi.repository.TaskRepository;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task create(@RequestBody Task task) {
+    public Task create(@Valid @RequestBody Task task) {
         return taskRepository.save(task);
     }
 
