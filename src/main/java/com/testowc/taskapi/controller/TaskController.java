@@ -57,6 +57,15 @@ public class TaskController {
         return taskRepository.save(task);
     }
 
+    @PutMapping("/complete/{id}")
+    public Task complete(@PathVariable String id, @RequestBody Task taskDetails) {
+        Task task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("La tasca no existeix"));
+
+        task.setCompleted(taskDetails.getCompleted());
+
+        return taskRepository.save(task);
+    }
+
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id) {
         taskRepository.deleteById(id);
