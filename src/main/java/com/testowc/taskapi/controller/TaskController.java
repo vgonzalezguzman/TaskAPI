@@ -33,6 +33,15 @@ public class TaskController {
 
     @PostMapping
     public Task create(@Valid @RequestBody Task task) {
+        boolean exists = taskRepository.existsByNameAndDescriptionAndCompletedAndDueDate(
+                task.getName(),
+                task.getDescription(),
+                task.getCompleted(),
+                task.getDueDate()
+        );
+
+        if (exists) { throw new RuntimeException("La tasca ja existeix"); }
+
         return taskRepository.save(task);
     }
 
