@@ -21,6 +21,11 @@ public class TaskController {
         return taskRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public Task getById(@PathVariable String id) {
+        return taskRepository.findById(id).orElse(null);
+    }
+
     @PostMapping
     public Task create(@Valid @RequestBody Task task) {
         return taskRepository.save(task);
