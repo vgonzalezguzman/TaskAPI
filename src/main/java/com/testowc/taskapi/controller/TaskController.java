@@ -1,0 +1,32 @@
+package com.testowc.taskapi.controller;
+
+import com.testowc.taskapi.model.Task;
+import com.testowc.taskapi.repository.TaskRepository;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/tasks")
+public class TaskController {
+    private final TaskRepository taskRepository;
+
+    public TaskController(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
+
+    @GetMapping
+    public List<Task> all() {
+        return taskRepository.findAll();
+    }
+
+    @PostMapping
+    public Task create(@RequestBody Task task) {
+        return taskRepository.save(task);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable String id) {
+        taskRepository.deleteById(id);
+    }
+}
