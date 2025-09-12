@@ -1,7 +1,8 @@
 package com.testowc.taskapi.model;
 
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,14 +15,16 @@ public class Task {
     @Id
     private String id;
 
-    @NotBlank(message = "El camp nom no pot quedar en blanc")
+    @Size(min = 1, max = 50)
     private String name;
 
+    @Size(max = 300, message = "La descripció no pot superar els 200 caràcters")
     private String description;
 
+    @NotNull(message = "L'estat de la tasca és obligatori")
     private Boolean completed;
 
-    @FutureOrPresent(message = "La data no pot quedar al passat")
+    @Future(message = "La data no pot quedar al passat")
     private Date dueDate;
 
     @CreatedDate
