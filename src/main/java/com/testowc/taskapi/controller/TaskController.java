@@ -3,9 +3,10 @@ package com.testowc.taskapi.controller;
 import com.testowc.taskapi.model.Task;
 import com.testowc.taskapi.repository.TaskRepository;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -43,6 +44,51 @@ public class TaskController {
         if (exists) { throw new RuntimeException("La tasca ja existeix"); }
 
         return taskRepository.save(task);
+    }
+
+    @PostMapping("/multiple")
+    public ResponseEntity<Map<String, Object>> createMultiple(@Valid @RequestBody List<Task> tasks) {
+        List<Task> correctTasks = new ArrayList<>();
+        Set<String> seen = new HashSet<>();
+        List<Map<String, Object>> skipped = new ArrayList<>();
+
+        for (Task task : tasks) {
+            String key = task.getName() + "|" + task.getDescription() + "|" + task.getCompleted() + "|" + task.getDueDate();
+            if (seen.contains(key)) {
+                skipped.add(Map.of(
+                        "raó", "Duplicat a la càrrega",
+                        "tasca", task
+                ));
+                continue;
+            }
+
+            seen.add(key);
+
+            boolean exists = taskRepository.existsByNameAndDescriptionAndCompletedAndDueDate(
+                    task.getName(),
+                    task.getDescription(),
+                    task.getCompleted(),
+                    task.getDueDate()
+            );
+
+            if (exists) {
+                skipped.add(Map.of(
+                        "raó", "Ja existeix a la BDD",
+                        "tasca", task
+                ));
+            } else {
+                correctTasks.add(task);
+            }
+        }
+
+        List<Task> saved = taskRepository.saveAll(correctTasks);
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("Tasques guardades", saved);
+        response.put("Tasques omeses", skipped);
+
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")

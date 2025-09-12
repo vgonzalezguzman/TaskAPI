@@ -99,4 +99,21 @@ public class TaskControllerTest {
         Task taskFromDb = taskRepository.findById(savedTask.getId()).orElseThrow();
         assertThat(taskFromDb.getName()).isEqualTo("Test task updated");
     }
+
+    @Test
+    void uploadBadData_returnsBadRequest() {
+        Date date = new Date((System.currentTimeMillis() + 24 * 60 * 60 * 1000));
+        Task task = new Task("", "Test for bad request", false, date);
+
+        HttpEntity<Task> request = new HttpEntity<>(task);
+        ResponseEntity<Task> response = restTemplate.exchange(
+                "/api/tasks",
+                HttpMethod.POST,
+                request,
+                Task.class
+        );
+
+        System.out.println("status code = " + response.getStatusCode());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
 }
