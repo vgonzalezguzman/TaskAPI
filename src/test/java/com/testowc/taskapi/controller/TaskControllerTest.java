@@ -113,7 +113,6 @@ public class TaskControllerTest {
                 Task.class
         );
 
-        System.out.println("status code = " + response.getStatusCode());
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 }
