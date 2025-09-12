@@ -26,17 +26,17 @@ Per a executar els tests anem a la ruta "/src/test/java/com/testowc/taskapi/cont
 ## MongoDB Compass
 En aquesta aplicació haurem de crear 2 bases de dades noves: una anomenada "toDoApp" i una altra anomenada "toDoApp_test". L'aplicació s'encarrega de definir les coleccions i les columnes.<br>
 També es poden crear les coleccions de la BDD via MongoSH via aquestes comandes:
-'''
+```
 use toDoApp
 db.createCollection("tasks")
 use toDoApp_Test
 db.createCollection("tasks")
-'''
+```
 Per afegir entrades a la colecciò ens podem ajudar d'aquesta comanda (recomano només afegir dades a la taula toDoApp i no a la taula toDoApp_test perquè els tests eliminen totes les entrades cada vegada que s'executen):
-'''
+```
 db.tasks.insertMany([{name: "Test name 1", description: "Test description 1", completed: false, dueDate: Date()},{name: "Test name 2", description: "Test description 2", completed: true, dueDate: Date()},{name: "Test name 3", description: "Test description 3", completed: false, dueDate: Date()}])
-'''
+```
 O si només vols afegir una entrada:
-'''
+```
 db.tasks.insetOne({name: "Test name", description: "Test description", completed: false, dueDate: Date()})
-'''
+```
