@@ -40,3 +40,6 @@ O si només vols afegir una entrada:
 ```
 db.tasks.insetOne({name: "Test name", description: "Test description", completed: false, dueDate: Date()})
 ```
+<br>
+
+Possiblitat d'utilitzar Swagger d'OpenAPI executant l'API i accedint a la url `http://localhost:8080/swagger-ui/index.html#/`
