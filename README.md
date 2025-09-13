@@ -8,13 +8,13 @@ Dins el programa, al menú superior fes clic a "File -> Open", t'obrirà l'explo
 Si l'IDE et demana en quina configuració obrir-ho (en cas que ho hagis obert en un altre IDE), selecciona l'opció "Maven project". 
 Posteriorment, et demanarà en quina finestra obrir-lo, no és importat, i posteriorment et demanarà si confies en l'aplicació, per evitar problemes d'execució has de clicar el botó "Trust this project" o la variació adient. <br>
 Si l'has obert amb un altre IDE és possible que el projecte no et deixi executar, en aquest cas t'hauria de sortir un avís a la part inferior dreta preguntant si vols carregar les dependències Maven, accepta que les carregui.<br>
-Els fitxers rellevants a la funcionalitat de la API són a la ruta "TaskAPI/src/main/java/com.testowc.taskapi/".<br>
+Els fitxers rellevants a la funcionalitat de l'API són a la ruta "TaskAPI/src/main/java/com.testowc.taskapi/".<br>
 Per executar el projecte, fes clic al botó <img width="24" height="24" alt="image" src="https://github.com/user-attachments/assets/060780c9-52ac-46fa-b4c9-95383cb6d368" /> situat a la part superior central de la finestra.<br>
-Els tests es troben a la ruta "TaskAPI/src/test/java/com.testowc.taskapi/controller/". Per executar-los, fes clic dret al fitxer "TaskControllerTest" dins la ruta esmentada i selecciona la opció "Run 'TaskControllerTest'".<br>
+Els tests es troben a la ruta "TaskAPI/src/test/java/com.testowc.taskapi/controller/". Per executar-los, fes clic dret al fitxer "TaskControllerTest" dins la ruta esmentada i selecciona l'opció "Run 'TaskControllerTest'".<br>
 Espera que acabi l'execució del test i a la finestra que s'ha obert a la part inferior hauries de veure això: <br>
 <img width="623" height="244" alt="image" src="https://github.com/user-attachments/assets/0df65da5-732f-4af7-9648-7ea58bffda68" /><br>
 ## Eclipse
-A l'aplicació Eclipse el procediment es similar a IntellIJ.<br>
+A l'aplicació Eclipse el procediment és similar a IntellIJ.<br>
 Obrim l'IDE, cliquem el botó "Browse..." i busquem qualsevol carpeta menys la del projecte, després, al menú superior de l'IDE cliquem el botó "File->Open Projects from File System". <br>
 Això ens obrirà una finestra en la qual clicarem el text "Show other specialized import wizards" i escollim "Maven->Existing Maven Projects".<br>
 Posteriorment fem clic al botó "Next >" i busquem el directori del projecte clicant el botó "Browse...". Una vegada seleccionat el projecte cliquem el botó "Finish".<br>
@@ -23,6 +23,13 @@ Quan el projecte carregui el podem executar anant a la ruta "/src/main/java/com/
 situat a la part superior de la finestra:<br>
 <img width="1010" height="759" alt="image" src="https://github.com/user-attachments/assets/29f4f4b0-b17b-4581-9ab4-6ba0a0cc9f69" /><br>
 Per a executar els tests anem a la ruta "/src/test/java/com/testowc/taskapi/controller/" i seleccionem el fitxer "TaskControllerTest.java" i clicant el botó d'execució.
+## Visual Studio Code
+Primer has de preparar l'IDE per l'execució de codi Java, donat que normalment aquest IDE està preparat per desenvolupar en llenguatges com HTML o JS.<br>
+Per preparar l'IDE recomano seguir el tutorial d'aquesta pàgina web `https://code.visualstudio.com/docs/java/java-tutorial`. Aquesta pàgina és la pàgina oficial de Visual Studio Code i et dona una extensió per a descarregar el SDK de Java preparat per l'IDE,
+també proporciona recomanacions de extensións per a facilitar el procés de crear codi Java en VS Code.<br>
+Recomano també descarregar les extensions de Maven i de Springboot per adaptar-se a aquest projecte.<br>
+Una vegada finalitzat aquest procés, descarregues el projecte, el descomprimeixes i obres el fitxer amb VS Code, després obres el fitxer "TaskApiApplication.java" i a la part superior dreta de l'editor es mostrarà una fletxa que permetrà l'execució de l'API.<br>
+En el cas dels testos és exactament igual, obres el fitxer "TaskControllerTest.java" i l'executes de la mateixa manera que el fitxer d'aplicació.
 ## MongoDB Compass
 En aquesta aplicació haurem de crear 2 bases de dades noves: una anomenada "toDoApp" i una altra anomenada "toDoApp_test". L'aplicació s'encarrega de definir les coleccions i les columnes.<br>
 També es poden crear les coleccions de la BDD via MongoSH via aquestes comandes:
