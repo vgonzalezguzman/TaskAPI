@@ -115,4 +115,16 @@ public class TaskControllerTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
+
+    @Test
+    void deleteTaskById_returnsOK() {
+        Task savedTask = taskRepository.save(new Task("Test task 1", "Test description 1", false, new Date()));
+        ResponseEntity<Task> response = restTemplate.exchange(
+                "/api/tasks/" + savedTask.getId(),
+                HttpMethod.DELETE,
+                null,
+                Task.class
+        );
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
 }
