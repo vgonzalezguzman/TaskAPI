@@ -123,10 +123,10 @@ public class TaskController {
     }
 
     @PutMapping("/complete/{id}")
-    public Task complete(@PathVariable String id, @RequestBody Task taskDetails) {
+    public Task complete(@PathVariable String id) {
         Task task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("La tasca no existeix"));
 
-        task.setCompleted(taskDetails.getCompleted());
+        task.setCompleted(!task.getCompleted());
 
         return taskRepository.save(task);
     }
