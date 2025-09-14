@@ -2,7 +2,9 @@ package com.testowc.taskapi.controller;
 
 import com.testowc.taskapi.model.Task;
 import com.testowc.taskapi.repository.TaskRepository;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,9 +14,11 @@ import java.util.*;
 @RequestMapping("/api/tasks")
 public class TaskController {
     private final TaskRepository taskRepository;
+    private final Validator validator;
 
-    public TaskController(TaskRepository taskRepository) {
+    public TaskController(TaskRepository taskRepository,  Validator validator) {
         this.taskRepository = taskRepository;
+        this.validator = validator;
     }
 
     @GetMapping
@@ -47,12 +51,25 @@ public class TaskController {
     }
 
     @PostMapping("/multiple")
-    public ResponseEntity<Map<String, Object>> createMultiple(@Valid @RequestBody List<Task> tasks) {
+    public ResponseEntity<Map<String, Object>> createMultiple(@RequestBody List<Task> tasks) {
         List<Task> correctTasks = new ArrayList<>();
         Set<String> seen = new HashSet<>();
         List<Map<String, Object>> skipped = new ArrayList<>();
 
         for (Task task : tasks) {
+            //Revisar que l'entrada sigui vàlida contra la informació del model
+            Set<ConstraintViolation<Task>> violations = validator.validate(task);
+
+            if  (!violations.isEmpty()) {
+                skipped.add(Map.of(
+                        "raó", "Validació fallada",
+                        "tasca", task,
+                        "errors", violations.stream().map(ConstraintViolation::getMessage).toList()
+                ));
+                continue;
+            }
+
+            //Revisar que les entrades no es repeteixin dins del cos de la request
             String key = task.getName() + "|" + task.getDescription() + "|" + task.getCompleted() + "|" + task.getDueDate();
             if (seen.contains(key)) {
                 skipped.add(Map.of(
@@ -64,6 +81,7 @@ public class TaskController {
 
             seen.add(key);
 
+            //Revisar que les entrades no existeixen dins la BDD
             boolean exists = taskRepository.existsByNameAndDescriptionAndCompletedAndDueDate(
                     task.getName(),
                     task.getDescription(),
@@ -83,6 +101,7 @@ public class TaskController {
 
         List<Task> saved = taskRepository.saveAll(correctTasks);
 
+        //Formulació de la resposta
         Map<String, Object> response = new HashMap<>();
 
         response.put("Tasques guardades", saved);
@@ -104,10 +123,10 @@ public class TaskController {
     }
 
     @PutMapping("/complete/{id}")
-    public Task complete(@PathVariable String id, @RequestBody Task taskDetails) {
+    public Task complete(@PathVariable String id) {
         Task task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("La tasca no existeix"));
 
-        task.setCompleted(taskDetails.getCompleted());
+        task.setCompleted(!task.getCompleted());
 
         return taskRepository.save(task);
     }

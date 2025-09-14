@@ -14,9 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -101,6 +99,29 @@ public class TaskControllerTest {
     }
 
     @Test
+    void uploadTaskArray_returnsOK() {
+        Date futureDate = new Date((System.currentTimeMillis() + 24 * 60 * 60 * 1000));
+        Date pastDate = new Date((System.currentTimeMillis() - 24 * 60 * 60 * 1000));
+        List<Task> tasks = new ArrayList<>();
+        tasks.add(new Task("Test task 1", "Test description 1", false, futureDate));
+        tasks.add(new Task("Test task 2", "Test description 2", false, futureDate));
+        tasks.add(new Task("Test task 3", "Test description 3", false, pastDate));
+        tasks.add(new Task("Test task 2", "Test description 2", false, futureDate));
+
+        HttpEntity<List<Task>> request = new HttpEntity<>(tasks);
+        ResponseEntity<Map> response = restTemplate.exchange(
+                "/api/tasks/multiple",
+                HttpMethod.POST,
+                request,
+                Map.class
+        );
+
+        //Ha de guardar la primera i la segona entrada i ha de rebutjar la tercera i quarta entrada.
+        System.out.println(response.getBody());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
     void uploadBadData_returnsBadRequest() {
         Date date = new Date((System.currentTimeMillis() + 24 * 60 * 60 * 1000));
         Task task = new Task("", "Test for bad request", false, date);
@@ -113,7 +134,18 @@ public class TaskControllerTest {
                 Task.class
         );
 
-        System.out.println("status code = " + response.getStatusCode());
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    void deleteTaskById_returnsOK() {
+        Task savedTask = taskRepository.save(new Task("Test task 1", "Test description 1", false, new Date()));
+        ResponseEntity<Task> response = restTemplate.exchange(
+                "/api/tasks/" + savedTask.getId(),
+                HttpMethod.DELETE,
+                null,
+                Task.class
+        );
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }
